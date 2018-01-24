@@ -86,7 +86,7 @@ Before we do anything, let's make sure our working directory is correctly set.
 ```
 
 ```{bash snoophousing}
-
+head -10 'data/housing_680.csv'
 
 ```
 
@@ -100,7 +100,7 @@ housing <- read.table("data/housing_680.csv", header=TRUE, sep=",", stringsAsFac
 Check the structure of the resulting data.frame (with `str` or click the icon in the Environment tab.)
 
 ```{r strhousing}
-
+str(housing)
 ```
 
 
@@ -124,7 +124,7 @@ Let's look at the first 10 rows of the Boro column. Why are the first few values
 for Boro shown by the `str` function equal to 3?
 
 ```{r factors}
-
+housing$Boro[1:10]
 ```
 
 See Section 4.4.2 in RforE for more on factors. And here's a nice [blog post on
@@ -136,7 +136,8 @@ the next few weeks.
 How many rows and columns are in `housing`? Use R functions to answer.
 
 ```{r numrowscols}
-
+nrow(housing)
+ncol(housing)
 ```
 
 
@@ -167,13 +168,13 @@ Do we appear to have outliers?
 Now use the `table` function on Boro.
 
 ```{r boro_table}
-
+table(housing$Boro)
 ```
 
 Repeat for Boro and Class.
 
 ```{r boro_class_table}
-
+table(housing$Boro, Housing$Class)
 ```
 
 
@@ -188,7 +189,7 @@ how we can actually check if that's true for all of the rows.
 
 ```{r}
 # Let's start by making a common mistake. Here's a formula to compare the two things of interest.
-# is.netinc.ok <- (Income - Expense) == NetIncome
+is.netinc.ok <- (housing$Income - housing$Expense) == housing$NetIncome
 ```
 
 
@@ -281,7 +282,7 @@ This is called *feature engineering* and is often one of the most important
 steps in the data science process of building good models.
 
 ```{r valpersqft}
-housing$ValuePerSqFt <- ????
+housing$ValuePerSqFt <- housing$Value/housing$SqFt
 ```
 
 
@@ -392,7 +393,7 @@ Another good way to quickly identify more extreme values is to
 standardize the data onto a z-scale (mean of 0, std deviation of 1.) 
 
 ```{r}
-# housing$zValuePerSqFt <- ?????
+# housing$zValuePerSqFt <- (housing$ValuePerSqft - mean(housing$value))/sd(housing$ValuePerSqft)
 
 
 
@@ -402,7 +403,7 @@ Find unusually large or small z-values
 
 ```{r}
 # Show rows where zValuePerSqFt is > 2 or < -2. HINT: Vector subsetting
-
+housing$zValuePerSqFt[housing$zValuePerSqFt > 2.5]
 
 ```
 
